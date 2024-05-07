@@ -77,9 +77,6 @@ export default function ItemList() {
             </List >
             <ItemForm addNewItem={addNewItem} />
         </>
-        //Input field
-
-
     );
 }
 //list -> listItem -> listItemButton -> listItemIcon -> listItemtext
