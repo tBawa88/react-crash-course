@@ -1,6 +1,8 @@
 import Box from '@mui/material/Box'
 import Heading from './Heading'
-import Item from "./DummyList";
+import ItemList from "./ItemList";
+// import ItemForm from './ItemForm';
+
 export default function TodoListBody() {
     return (
         <Box sx={{
@@ -10,7 +12,12 @@ export default function TodoListBody() {
             textAlign: 'center'
         }}>
             <Heading />
-            <Item />
+            <Box sx={{
+                width: "50%",
+                margin: '0 auto'
+            }}>
+                <ItemList />
+            </Box>
         </Box>
     )
 }

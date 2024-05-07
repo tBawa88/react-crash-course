@@ -4,7 +4,8 @@ export default function Heading() {
     return <>
         <Typography variant="h1" sx={{
             fontWeight: "300",
-            mt: "1.8rem"
+            mt: "1.8rem",
+
         }}
             gutterBottom>
             Todos
