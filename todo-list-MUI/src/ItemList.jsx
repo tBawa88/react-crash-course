@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -13,24 +13,47 @@ import ItemForm from './ItemForm';
 export default function ItemList() {
     const [itemlist, setItemList] = useState(seed)
 
-    //toggling checked property of the list item
+    // retreive list data from local storage on first mount
+    useEffect(() => {
+        const listData = localStorage.getItem('todos');
+        if (listData)
+            setItemList(JSON.parse(listData));
+    }, [])
+
+    const updateLocalStorage = (newListData) => {
+        localStorage.setItem('todos', JSON.stringify(newListData));
+    }
+
+    //toggling checked property of the list item, also updating the local storage
     const handleToggle = (item) => () => {
-        setItemList(oldList => oldList.map(elem => {
-            if (elem.id === item.id)
-                return { ...elem, checked: elem.checked ? false : true }
-            else
-                return elem
-        }))
+        setItemList(oldList => {
+            const newListData = oldList.map(elem => {
+                if (elem.id === item.id)
+                    return { ...elem, checked: elem.checked ? false : true }
+                else
+                    return elem
+            })
+            updateLocalStorage(newListData);
+            return newListData;
+        })
     };
 
     //deleting list item
     const handleClose = (id) => {
-        setItemList(oldlist => oldlist.filter(item => item.id !== id))
+        setItemList(oldlist => {
+            const newListData = oldlist.filter(item => item.id !== id);
+            updateLocalStorage(newListData);
+            return newListData;
+        })
     }
 
     //pushing new list item to state of this comp
     const addNewItem = (newItem) => {
-        setItemList(oldList => [...oldList, newItem])
+        setItemList(oldList => {
+            const newListData = [...oldList, newItem];
+            updateLocalStorage(newListData);
+            return newListData;
+        })
     }
 
 
@@ -64,7 +87,7 @@ export default function ItemList() {
                                         edge="start"
                                         checked={value.checked}
                                         // checked={checked.indexOf(value) !== -1}
-                                        tabIndex={-1}
+                                        // tabIndex={-1}
                                         disableRipple
                                         inputProps={{ 'aria-labelledby': labelId }}
                                     />
@@ -75,6 +98,8 @@ export default function ItemList() {
                     );
                 })}
             </List >
+
+            {/* Item form component */}
             <ItemForm addNewItem={addNewItem} />
         </>
     );
